@@ -1,15 +1,59 @@
 #include "MKS_draw_language.h"
+#include "language_en.h"
+#include "language_ch.h"
 
 mc_lg_muilt_t mc_language;
 LANGUAGE_PAGE_T language_page;
 
 void mc_language_init(void) {
 
-	if(mks_grbl.language = SimpleChinese) {
+	if(mks_grbl.language == SimpleChinese) {
+		mc_language.back = BACK_CH;
+		mc_language.yes = YES_CH;
+		mc_language.no = NO_CH;
+		
+		mc_language.control = CONTROL_CH;
+		mc_language.sculpture = SCULPTURE_CH;
+		mc_language.tool = TOOL_CH;
+		mc_language.Mpos = MPOS_CH;
+		mc_language.Wpos = WPOS_CH;
+		mc_language.wifi_connect = WIFI_CONNECT_CH;
+		mc_language.wifi_disconnect = WIFI_DISCONNECT_CH;
+		
+		mc_language.xy_clear = XY_CLEAR_CH;
+		mc_language.z_clear = Z_CLEAR_CH;
+		mc_language.knife = KNIFE_CH;
+		mc_language.next = NEXT_CH;
+		mc_language.up = UP_CH;
+		mc_language.cooling = COOLING_CH;
+		mc_language.position = POSITION_CH;
+		mc_language.speed_high = SPEED_HIGH_CH;
+		mc_language.speed_mid = SPEED_MID_CH; 
+		mc_language.speed_low = SPEED_LOW_CH;
+		mc_language.spindle = SPINDLE_CH;
+		mc_language.carve = CARVE_CH;
 
-		 
+		mc_language.dis_no_sd_card = DIS_NO_SDCARD_CH;
+		
+		mc_language.hold = HOLD_CH;
+		mc_language.cycle = CYCLE_CH;
+		mc_language.stop = STOP_CH;
+		mc_language.adjust = ADJUST_CH;
+		mc_language.spindle_speed = SPINDLE_SPPED_CH;
+		mc_language.feed_rate = FEED_RATE_CH;
+		mc_language.rapid_speed = RAPID_SPEED_CH;
+		mc_language.carve_times = CARVE_TIMES_CH;
+
+		mc_language.dis_stop_print = DIS_STOP_CARVE_CH;
+		mc_language.dis_homing = DIS_HOMEING_CH;
+		mc_language.dis_no_hard_homing = DIS_NO_HARD_HOME_CH;
+		mc_language.dis_homing_succeed = DIS_HOME_SUCCEED_CH;
+		mc_language.dis_homing_fail = DIS_HOME_FAIL_CH;
+		mc_language.dis_probe_set = DIS_PROBE_SET_CH;
+		mc_language.dis_probe_succeed = DIS_PROBE_SECCEED_CH;
+		mc_language.dis_probe_fail = DIS_PROBE_FAIL_CH;
 	}
-	else if(mks_grbl.language = English) {
+	else if(mks_grbl.language == English) {
 		mc_language.back = BACK_EN;
 		mc_language.yes = YES_EN;
 		mc_language.no = NO_EN;
@@ -41,13 +85,17 @@ void mc_language_init(void) {
 		mc_language.cycle = CYCLE_EN;
 		mc_language.stop = STOP_EN;
 		mc_language.adjust = ADJUST_EN;
+		mc_language.spindle_speed = SPINDLE_SPPED_EN;
+		mc_language.feed_rate = FEED_RATE_EN;
+		mc_language.rapid_speed = RAPID_SPEED_EN;
+		mc_language.carve_times = CARVE_TIMES_EN;
 
 		mc_language.dis_stop_print = DIS_STOP_CARVE_EN;
 		mc_language.dis_homing = DIS_HOMEING_EN;
 		mc_language.dis_no_hard_homing = DIS_NO_HARD_HOME_EN;
 		mc_language.dis_homing_succeed = DIS_HOME_SUCCEED_EN;
 		mc_language.dis_homing_fail = DIS_HOME_FAIL_EN;
-		mc_language.dis_probe_set = DIS_PROBE_SET;
+		mc_language.dis_probe_set = DIS_PROBE_SET_EN;
 		mc_language.dis_probe_succeed = DIS_PROBE_SECCEED_EN;
 		mc_language.dis_probe_fail = DIS_PROBE_FAIL_EN;
 	}

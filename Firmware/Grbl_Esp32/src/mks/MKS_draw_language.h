@@ -82,6 +82,7 @@ typedef struct {
 extern mc_lg_muilt_t mc_language;
 
 
+void mc_language_init(void);
 void draw_language(void);
 void mks_clear_language(void);
 

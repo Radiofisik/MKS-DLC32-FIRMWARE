@@ -20,8 +20,7 @@
 #include "mks_test.h"
 #include "draw_ui.h"
 
-#include "language_en.h"
-#include "language_ch.h"
+// Language files are included in MKS_draw_language.cpp
 // #include "language_de.h"
 
 extern lv_obj_t *mks_src;

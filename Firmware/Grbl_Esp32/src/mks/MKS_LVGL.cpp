@@ -1,4 +1,5 @@
 #include "MKS_LVGL.h"
+#include "MKS_draw_language.h"
 #include "TFT_eSPI.h"
 
 #define LV_BUF_SIZE              10 * LV_HOR_RES_MAX
@@ -106,7 +107,10 @@ void mks_grbl_parg_init(void) {
 
     if(language_select->get() == 0) mks_grbl.language = SimpleChinese;
     else if(language_select->get() == 1) mks_grbl.language = English;
-    else if(language_select->get() == 1) mks_grbl.language = Deutsch;
+    else if(language_select->get() == 2) mks_grbl.language = Deutsch;
+    
+    // Initialize language strings after setting language
+    mc_language_init();
     
     mks_grbl.light_status = GRBL_Light_Off;
     mks_grbl.move_dis = M_10_MM;

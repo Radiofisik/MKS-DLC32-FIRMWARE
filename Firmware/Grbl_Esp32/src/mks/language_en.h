@@ -1,5 +1,5 @@
-#ifndef __language_ch_h
-#define __language_ch_h
+#ifndef __language_en_h
+#define __language_en_h
 
 /* 公共 */
 #define BACK_EN                 "Back"
@@ -49,6 +49,7 @@
 #define DIS_HOME_SUCCEED_EN  	"Homing succeed!"
 #define DIS_HOME_FAIL_EN    	"Homing fail"
 #define DIS_PROBE_SET           "Setting probe..."
+#define DIS_PROBE_SET_EN        "Setting probe..."
 #define DIS_PROBE_SECCEED_EN    "Probe succeed!"
 #define DIS_PROBE_FAIL_EN       "Probe fail!"
 #define DIS_HARD_LIMIT_EN       "Hard Limit!"
