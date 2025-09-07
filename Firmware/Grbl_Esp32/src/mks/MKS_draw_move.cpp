@@ -4,6 +4,13 @@ MKS_MOVE_PAGE move_page;
 MKS_MOVE_CTRL_T ui_move_ctrl;
 PROBE_RUN_T probe_run;
 
+// Long press functionality variables
+static lv_obj_t* long_press_active_btn = NULL;
+static char long_press_axis = 0;
+static uint8_t long_press_dir = 0;
+static lv_task_t* long_press_task = NULL;
+static uint32_t long_press_interval = 200; // Movement repeat interval in ms
+
 static void disp_imgbtn(void);
 
 static void disp_imgbtn_1(void);
@@ -12,6 +19,11 @@ static void disp_btn(void);
 static void disp_label(void);
 static void disp_imgbtn_2(void);
 static void disp_imgbtn_2_del(void);
+
+// Long press function declarations
+static void long_press_task_cb(lv_task_t* task);
+static void start_long_press_movement(lv_obj_t* btn, char axis, uint8_t dir);
+static void stop_long_press_movement(void);
 
 enum {
 	ID_M_UP,
@@ -68,6 +80,37 @@ static void event_henadle_pupup_com(lv_obj_t* obj, lv_event_t event) {
 		set_click_status(true);
 		common_popup_com_del();
 	}
+}
+
+// Task callback for long press continuous movement
+static void long_press_task_cb(lv_task_t* task) {
+	if (long_press_active_btn && long_press_axis && sys.state == State::Idle) {
+		move_ctrl(long_press_axis, long_press_dir);
+	}
+}
+
+// Start long press continuous movement
+static void start_long_press_movement(lv_obj_t* btn, char axis, uint8_t dir) {
+	// Stop any existing long press task
+	stop_long_press_movement();
+	
+	long_press_active_btn = btn;
+	long_press_axis = axis;
+	long_press_dir = dir;
+	
+	// Create repeating task for continuous movement
+	long_press_task = lv_task_create(long_press_task_cb, long_press_interval, LV_TASK_PRIO_MID, NULL);
+}
+
+// Stop long press continuous movement
+static void stop_long_press_movement(void) {
+	if (long_press_task) {
+		lv_task_del(long_press_task);
+		long_press_task = NULL;
+	}
+	long_press_active_btn = NULL;
+	long_press_axis = 0;
+	long_press_dir = 0;
 }
 
 void set_move(char axis, float step, uint32_t speed) {
@@ -341,17 +384,34 @@ void set_move_back(void) {
 
 static void event_handler(lv_obj_t* obj, lv_event_t event) {
 
-	if(event != LV_EVENT_RELEASED) return;
-
 	uint8_t id = get_event(obj);
 
+	// Handle movement buttons with long press support
+	if (id == ID_M_UP || id == ID_M_DOWN || id == ID_M_LEFT || 
+		id == ID_M_RIGHT || id == ID_M_Z_UP || id == ID_M_Z_DOWN) {
+		
+		if (event == LV_EVENT_PRESSED) {
+			// Start initial movement and prepare for long press
+			switch(id) {
+				case ID_M_UP	:	move_ctrl('Y', 1); start_long_press_movement(obj, 'Y', 1); break;
+				case ID_M_DOWN	:	move_ctrl('Y', 0); start_long_press_movement(obj, 'Y', 0); break;
+				case ID_M_LEFT	:	move_ctrl('X', 0); start_long_press_movement(obj, 'X', 0); break;
+				case ID_M_RIGHT	:	move_ctrl('X', 1); start_long_press_movement(obj, 'X', 1); break;
+				case ID_M_Z_UP	:	move_ctrl('Z', 1); start_long_press_movement(obj, 'Z', 1); break;
+				case ID_M_Z_DOWN:	move_ctrl('Z', 0); start_long_press_movement(obj, 'Z', 0); break;
+			}
+		}
+		else if (event == LV_EVENT_RELEASED) {
+			// Stop continuous movement
+			stop_long_press_movement();
+		}
+		return;
+	}
+
+	// Handle other buttons only on release
+	if(event != LV_EVENT_RELEASED) return;
+
 	switch(id) {
-		case ID_M_UP	:	move_ctrl('Y', 1); 	break;
-		case ID_M_DOWN	:	move_ctrl('Y', 0); 	break;
-		case ID_M_LEFT	:	move_ctrl('X', 0); 	break;
-		case ID_M_RIGHT	:	move_ctrl('X', 1); 	break;
-		case ID_M_Z_UP	:	move_ctrl('Z', 1);	break;
-		case ID_M_Z_DOWN:	move_ctrl('Z', 0);	break;
 		case ID_M_STEP	:	set_step_len();		break;
 		case ID_M_SPEED	:	set_speed();		break;
 		case ID_M_UNLOCK:	mc_unlock();		break;
@@ -720,7 +780,14 @@ bool mks_get_motor_status(void) {
 	return stepper_idle;
 }
 
+// Public function to stop long press movement (can be called externally)
+void mks_stop_long_press_movement(void) {
+	stop_long_press_movement();
+}
+
 void mks_clear_move(void) {
+	// Stop any active long press movement before clearing UI
+	stop_long_press_movement();
 	lv_obj_clean(mks_src);
 }
 

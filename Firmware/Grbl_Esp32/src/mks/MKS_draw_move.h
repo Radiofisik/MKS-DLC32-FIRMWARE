@@ -141,4 +141,8 @@ void set_xy_home(void);
 void set_z_home(void);
 void move_pos_update(void);
 void probe_check();
+
+// Long press movement functions (external cleanup function)
+void mks_stop_long_press_movement(void);
+
 #endif
